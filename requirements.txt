@@ -1,0 +1,11 @@
+# Core libraries for Multi-Modal RAG
+transformers
+sentence-transformers
+faiss-cpu
+torch
+Pillow
+fastapi
+uvicorn
+python-dotenv
+requests
+scikit-learn
