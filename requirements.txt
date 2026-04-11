@@ -1,21 +1,30 @@
-# Core libraries for Multi-Modal RAG
-transformers
-sentence-transformers
-faiss-cpu
-torch
-Pillow
-# Core libraries for Multi-Modal RAG
-transformers
-sentence-transformers
-faiss-cpu
-torch
-Pillow
-fastapi
-uvicorn
-python-dotenv
-requests
-scikit-learn
-tqdm
-pydantic
-numpy
-openai
+# Multi-Modal RAG – Python dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Deep learning & embeddings ────────────────────────────────────────────────
+torch>=2.0.0
+transformers>=4.38.0
+sentence-transformers>=2.6.0
+
+# ── Vector search ─────────────────────────────────────────────────────────────
+faiss-cpu>=1.7.4         # CPU version works on all machines
+# faiss-gpu>=1.7.4       # uncomment and replace faiss-cpu if you have a CUDA GPU
+
+# ── Image processing ──────────────────────────────────────────────────────────
+Pillow>=10.0.0
+
+# ── API & web framework ───────────────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9   # required for FastAPI file uploads
+pydantic>=2.0.0
+
+# ── LLM generator backends ───────────────────────────────────────────────────
+openai>=1.20.0            # for OpenAI backend
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+numpy>=1.26.0
+tqdm>=4.66.0
+python-dotenv>=1.0.0
+scikit-learn>=1.4.0       # optional: used for future BM25 / sparse retrieval
+requests>=2.31.0
