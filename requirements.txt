@@ -19,8 +19,13 @@ uvicorn[standard]>=0.29.0
 python-multipart>=0.0.9   # required for FastAPI file uploads
 pydantic>=2.0.0
 
-# ── LLM generator backends ───────────────────────────────────────────────────
-openai>=1.20.0            # for OpenAI backend
+# ── LLM generator (free, local — no API key needed) ─────────────────────────
+# Models are downloaded automatically from HuggingFace Hub on first use.
+# Recommended free models:
+#   google/flan-t5-base   (~250 MB, CPU-friendly)  ← default
+#   microsoft/phi-2       (~6 GB RAM, better quality)
+#   gpt2                  (~500 MB, minimal hardware)
+accelerate>=0.27.0        # required for torch_dtype=float16 on GPU pipelines
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 numpy>=1.26.0

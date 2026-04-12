@@ -3,6 +3,8 @@ main.py
 =======
 FastAPI application exposing the Multi-Modal RAG pipeline over HTTP.
 
+All generation is handled by **free local HuggingFace models** — no API key needed.
+
 Endpoints
 ---------
 GET  /
@@ -25,7 +27,8 @@ Interactive docs are available at ``http://localhost:8000/docs``.
 
 Environment variables
 ---------------------
-``OPENAI_API_KEY``  – required when using the OpenAI generator backend.
+``GENERATOR_BACKEND``  – free model to use: ``flan-t5`` (default), ``phi2``, ``gpt2``.
+``CUSTOM_MODEL``       – any HuggingFace model ID (overrides ``GENERATOR_BACKEND``).
 """
 
 from __future__ import annotations
@@ -73,7 +76,12 @@ retriever = Retriever(
     fusion_strategy="reciprocal_rank",
 )
 
-generator = Generator(model_type=os.getenv("GENERATOR_BACKEND", "openai"))
+# GENERATOR_BACKEND env var selects the free model: flan-t5 (default), phi2, gpt2
+# or set CUSTOM_MODEL to any HuggingFace model ID (e.g. google/flan-t5-large)
+generator = Generator(
+    backend=os.getenv("GENERATOR_BACKEND", "flan-t5"),
+    custom_model_id=os.getenv("CUSTOM_MODEL") or None,
+)
 
 logger.info("System ready. text_store=%d vectors, image_store=%d vectors.",
             len(text_store), len(image_store))
