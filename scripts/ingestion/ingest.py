@@ -57,6 +57,16 @@ from core.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
 
+import sys
+
+# done because csv was not able to read large text
+max_size = sys.maxsize
+while True:
+    try:
+        csv.field_size_limit(max_size)
+        break
+    except OverflowError:
+        max_size = int(max_size / 10)
 
 # ---------------------------------------------------------------------------
 # Supported file extensions

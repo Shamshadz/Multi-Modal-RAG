@@ -2,7 +2,7 @@
 # Install with: pip install -r requirements.txt
 
 # ── Deep learning & embeddings ────────────────────────────────────────────────
-torch>=2.0.0
+# torch>=2.0.0
 transformers>=4.38.0
 sentence-transformers>=2.6.0
 
