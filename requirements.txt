@@ -3,7 +3,7 @@
 
 # ── Deep learning & embeddings ────────────────────────────────────────────────
 # torch>=2.0.0
-transformers>=4.38.0
+transformers>=5.5.4
 sentence-transformers>=2.6.0
 
 # ── Vector search ─────────────────────────────────────────────────────────────

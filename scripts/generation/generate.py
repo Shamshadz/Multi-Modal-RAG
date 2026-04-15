@@ -71,7 +71,7 @@ logger = logging.getLogger(__name__)
 FREE_MODELS: dict = {
     "flan-t5": {
         "model_id": "google/flan-t5-base",
-        "task": "text2text-generation",   # seq2seq – best for Q&A
+        "task": "text-generation",   # seq2seq – best for Q&A
         "description": "Flan-T5 base (~250 MB, CPU-friendly, good Q&A)",
     },
     "phi2": {
@@ -203,7 +203,7 @@ class Generator:
         str
             The generated answer string, with the input prompt stripped out.
         """
-        if self._task == "text2text-generation":
+        if "t5" in self.pipe.model.name_or_path.lower():
             # seq2seq (Flan-T5): the output contains only the generated answer,
             # never the prompt — no stripping needed.
             output = self.pipe(
@@ -211,7 +211,13 @@ class Generator:
                 max_new_tokens=max_new_tokens,
                 do_sample=False,          # greedy decoding = deterministic
             )
-            return output[0]["generated_text"].strip()
+            generated = output[0]["generated_text"]
+
+            # Remove prompt if echoed
+            if generated.startswith(prompt):
+                generated = generated[len(prompt):]
+
+            return generated.strip()
 
         else:
             # Decoder-only (GPT-2, Phi-2): the output INCLUDES the prompt.
@@ -233,31 +239,13 @@ class Generator:
 # ---------------------------------------------------------------------------
 
 def build_prompt(query: str, context: str) -> str:
-    """
-    Format a retrieval-augmented generation prompt.
+    return f"""
+Context:
+{context}
 
-    The phrasing is designed to work well for both seq2seq (Flan-T5) and
-    decoder-only (GPT-2, Phi-2) models.
-
-    Parameters
-    ----------
-    query : str
-        The user's question.
-    context : str
-        Concatenated retrieved chunks from Retriever.build_context().
-
-    Returns
-    -------
-    str
-        Ready-to-use prompt string.
-    """
-    return (
-        "Answer the question using only the context below.\n"
-        'If the context does not contain the answer, say "I don\'t know."\n\n'
-        f"Context:\n{context}\n\n"
-        f"Question: {query}\n"
-        "Answer:"
-    )
+Question: {query}
+Answer:
+""".strip()
 
 
 # ---------------------------------------------------------------------------
